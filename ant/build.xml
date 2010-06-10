@@ -1,0 +1,80 @@
+<project name="${component.name}" default="cleanLocalBuild" basedir=".">
+
+    <target name="initProperties"
+            description="initialize properties for the build">
+        <tstamp/>
+        <!-- read standard properties from properties files -->
+        <property file="project.properties"/>
+        <property environment="env"/>
+        <fileset id="classpath.fileset" dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <path id="classpath.path">
+            <fileset refid="classpath.fileset"/>
+        </path>
+        <property name="classpath.prop" refid="classpath.path"/>
+        <path id="ext.classpath.path">
+            <path refid="classpath.path"/>
+            <fileset dir="${libext.dir}">
+	           <include name="**/*.jar"/>
+            </fileset>
+        </path>
+    </target>
+
+    <target name="initLocalBuildProperties"
+            description="initialize properties for a local build">
+    </target>
+
+    <target name="echoproperties"
+            depends="initProperties,initLocalBuildProperties"
+            description="echo properties set by 'initProperties'. This target is useful for debugging">
+        <echoproperties/>
+    </target>
+
+    <target name="cleanLocalBuild"
+            depends="clean,baseBuild,buildDistArtifact"
+            description="initialize properties for a local build">
+    </target>
+
+    <target name="buildDistArtifact"
+            depends="baseBuild"
+            description="creates the distributable artifacts (in this case a war file)">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/${component.name}"/>
+        <mkdir dir="${build.dir}/${component.name}/WEB-INF"/>
+        <mkdir dir="${build.dir}/${component.name}/WEB-INF/classes"/>
+        <copy todir="${build.dir}/${component.name}/WEB-INF/classes"  file="${confsrc.dir}/salesforce.properties"/>
+        <copy todir="${build.dir}/${component.name}/WEB-INF/classes">
+            <fileset dir="${build.classes.dir}"/>
+        </copy>
+        <zip destfile="${build.dir}/${component.name}.zip">
+            <fileset dir="${build.dir}/${component.name}"/>
+        </zip>
+    </target>
+
+    <target name="baseBuild"
+            depends="initProperties"
+            description="compiles src to classes dir - core of of the build and dist tasks">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <javac srcdir="${src.dir}"
+                destdir="${build.classes.dir}"
+                debug="true"
+                deprecation="true"
+                fork="true"
+                includeAntRuntime="false">
+            <classpath>
+                <path refid="ext.classpath.path"/>
+            </classpath>
+        </javac>
+    </target>
+
+
+    <target name="clean"
+            depends="initProperties"
+            description="removes all files related to the build steps">
+        <delete dir="${build.dir}"/>
+    </target>
+
+
+</project>
