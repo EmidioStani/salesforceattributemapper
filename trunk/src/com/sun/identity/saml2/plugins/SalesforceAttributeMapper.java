@@ -92,8 +92,8 @@ public class SalesforceAttributeMapper extends DefaultLibraryIDPAttributeMapper 
         if (logoutURLAttributeValues[0] != null) attributes.add(getSAMLAttribute(logoutURL, null, logoutURLAttributeValues));
         if (ssoStartPageAttributeValues[0] != null) attributes.add(getSAMLAttribute(ssoStartPage, null, ssoStartPageAttributeValues));
         if (startURLAttributeValues[0] != null) attributes.add(getSAMLAttribute(startURL, null, startURLAttributeValues));
-        if (organizationIdAttributeValues[0] != null) attributes.add(getSAMLAttribute(startURL, null, organizationIdAttributeValues));
-        if (portalIdAttributeValues[0] != null) attributes.add(getSAMLAttribute(startURL, null, portalIdAttributeValues));
+        if (organizationIdAttributeValues[0] != null) attributes.add(getSAMLAttribute(organization_id, null, organizationIdAttributeValues));
+        if (portalIdAttributeValues[0] != null) attributes.add(getSAMLAttribute(portal_id, null, portalIdAttributeValues));
         return attributes;
 
     }
